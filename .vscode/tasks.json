@@ -3,7 +3,7 @@
     "tasks": [
         {
             "type": "shell",
-            "command": "./do build vscode",
+            "command": "python do build",
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -18,7 +18,7 @@
         },
         {
             "type": "shell",
-            "command": "./do core test",
+            "command": "python do test core",
             "group": {
                 "kind": "test",
                 "isDefault": true
@@ -27,7 +27,7 @@
         },
         {
             "type": "shell",
-            "command": "./do watch",
+            "command": "python do build --watch",
             "group": "build",
             "isBackground": true,
             "label": "Watch",
@@ -35,7 +35,7 @@
         },
         {
             "type": "shell",
-            "command": "nix develop -c ./do build vscode",
+            "command": "nix develop -c python do build",
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -50,7 +50,7 @@
         },
         {
             "type": "shell",
-            "command": "nix develop -c ./do core test",
+            "command": "nix develop -c python do test core",
             "group": {
                 "kind": "test",
                 "isDefault": true
@@ -59,7 +59,7 @@
         },
         {
             "type": "shell",
-            "command": "nix develop -c ./do watch",
+            "command": "nix develop -c python do build --watch",
             "group": "build",
             "isBackground": true,
             "label": "Watch (nix)",

@@ -1,3 +1,25 @@
+# AsciiDoc Rewrap changes
+
+## 0.1.1
+
+- Wrap prose inside PSV table cells without changing table attributes, cell specifiers or separators.
+- Support multiple cells on a line, multiline cell paragraphs, cursor wrapping and partial selections.
+- Preserve literal and rich cell models, data formats and implicit header detection.
+- Add synthetic table regressions and Asciidoctor rendering comparisons.
+
+## 0.1.0
+
+- Create an independent VS Code extension with dedicated `.adoc` support, retaining upstream language support.
+- Add an AsciiDoc block parser for lists, metadata, headings and quotations.
+- Protect tables, verbatim blocks, verses, directives and explicit line breaks.
+- Use separate `asciidocRewrap` commands and settings; preserve upstream credits.
+
+Earlier history belongs to Rewrap Revived and remains available in Git history.
+
+---
+
+## Upstream history: Rewrap Revived / Rewrap
+
 See also [https://github.com/dnut/rewrap/releases](https://github.com/dnut/rewrap/releases) (for working links to issues)
 
 # 18.4.1

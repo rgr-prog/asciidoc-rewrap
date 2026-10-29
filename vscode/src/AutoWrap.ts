@@ -124,7 +124,7 @@ const setDocumentAutoWrap =
 export default function (memento: Memento, subscriptions) {
   const onChangeEditor = setDocumentAutoWrap(memento, false)
   const changeIfAffects = (e: ConfigurationChangeEvent) => (ed: TextEditor) =>
-    e.affectsConfiguration('rewrap.autoWrap', ed.document) && onChangeEditor(ed)
+    e.affectsConfiguration('asciidocRewrap.autoWrap', ed.document) && onChangeEditor(ed)
   const ifActiveDoc = fn => window.activeTextEditor && fn(window.activeTextEditor)
 
   window.onDidChangeActiveTextEditor(e => e && onChangeEditor(e), undefined, subscriptions)

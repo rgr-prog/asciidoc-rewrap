@@ -1,12 +1,14 @@
 # Build outputs
 /.cache/
 /dist/
+/release-notes.md
 /node_modules/
 /vscode/node_modules/
 /core/dist/
 /core/test/prod.js*
 /vscode/dist/
 /vscode/README.md
+/vscode/CHANGELOG.md
 /vs/obj/
 /vscode/.parcel-cache
 *.pyc

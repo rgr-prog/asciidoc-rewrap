@@ -31,7 +31,7 @@ const testWrapping = async (language, content, expected) => {
   const doc = await workspace.openTextDocument({language, content})
   await window.showTextDocument(doc)
   await commands.executeCommand("editor.action.selectAll")
-  await commands.executeCommand("rewrap.rewrapComment")
+  await commands.executeCommand("asciidocRewrap.rewrap")
   assert.equal(doc.getText(), expected)
   await commands.executeCommand("workbench.action.closeActiveEditor")
 }
@@ -39,11 +39,11 @@ const testWrapping = async (language, content, expected) => {
 /** Multiple cursors, where the primary one (which comes first) is below the other. Both
  *  paragraphs are wrapped and the cursors stay in the same order. */
 const testUnorderedCursors = async () => {
-  const doc = await workspace.openTextDocument({language: 'markdown', content: 'a1\na2\n\n   b1\n   b2'})
+  const doc = await workspace.openTextDocument({language: 'asciidoc', content: 'a1\na2\n\n* b1\n  b2'})
   const editor = await window.showTextDocument(doc)
   editor.selections = [new Selection(4, 4, 4, 4), new Selection(0, 0, 0, 0)]
-  await commands.executeCommand('rewrap.rewrapComment')
-  assert.equal(doc.getText(), 'a1 a2\n\n   b1 b2')
+  await commands.executeCommand('asciidocRewrap.rewrap')
+  assert.equal(doc.getText(), 'a1 a2\n\n* b1 b2')
   assert.deepStrictEqual(
     editor.selections.map(s => [s.active.line, s.active.character]), [[2, 7], [0, 0]])
   await commands.executeCommand('workbench.action.revertAndCloseActiveEditor')
@@ -53,7 +53,7 @@ const testUnorderedCursors = async () => {
  *  editor's selections, so checking the editor alone doesn't exercise this mapping. */
 const testUnorderedSelectionMapping = async () => {
   const doc = await workspace.openTextDocument({
-    language: 'markdown', content: 'header\na1\na2\n\n   b1\n   b2\nfooter',
+    language: 'asciidoc', content: 'header\na1\na2\n\n   b1\n   b2\nfooter',
   })
   const {selections} = buildEdits(doc, {
     isEmpty: false,
@@ -93,9 +93,9 @@ const waitFor = async (check, {stableFor = 0, timeout = 3000} = {}) => {
  *  after the wrapped text (#63). */
 const testAutoWrapCursorWithVimStyleTyping = async () => {
   const before = 'aaaa '.repeat(8) + 'bbbbbbbb' // 48 chars, plaintext column is 45
-  const doc = await workspace.openTextDocument({language: 'plaintext', content: before})
+  const doc = await workspace.openTextDocument({language: 'asciidoc', content: before})
   const editor = await window.showTextDocument(doc)
-  await commands.executeCommand('rewrap.toggleAutoWrap')
+  await commands.executeCommand('asciidocRewrap.toggleAutoWrap')
   try {
     // The toggle finishes asynchronously, and the command doesn't wait for it
     await sleep(200)
@@ -119,7 +119,7 @@ const testAutoWrapCursorWithVimStyleTyping = async () => {
       [editor.selection.active.line, editor.selection.active.character], [1, 9])
   }
   finally {
-    await commands.executeCommand('rewrap.toggleAutoWrap')
+    await commands.executeCommand('asciidocRewrap.toggleAutoWrap')
     await commands.executeCommand('workbench.action.revertAndCloseActiveEditor')
   }
 }
@@ -128,16 +128,34 @@ const testAutoWrapCursorWithVimStyleTyping = async () => {
  *  first wrap didn't change anything. Plaintext has rulers at 45 and 90. */
 const testRulerCycleAfterNoopWrap = async () => {
   const line1 = 'aaaa '.repeat(8).trimEnd(), line2 = 'bbbbbbb bbbbbbb'
-  const doc = await workspace.openTextDocument({language: 'plaintext', content: line1 + '\n' + line2})
+  const doc = await workspace.openTextDocument({language: 'asciidoc', content: line1 + '\n' + line2})
   await window.showTextDocument(doc)
-  await commands.executeCommand('rewrap.rewrapComment')
+  await commands.executeCommand('asciidocRewrap.rewrap')
   assert.equal(doc.getText(), line1 + '\n' + line2, 'already wrapped at 45')
-  await commands.executeCommand('rewrap.rewrapComment')
+  await commands.executeCommand('asciidocRewrap.rewrap')
   assert.equal(doc.getText(), line1 + ' ' + line2, 'wrapped at 90')
   // Cycles back to the first ruler. (This also resets the column remembered for the
   // document's path, which may be reused by other untitled documents.)
-  await commands.executeCommand('rewrap.rewrapComment')
+  await commands.executeCommand('asciidocRewrap.rewrap')
   assert.equal(doc.getText(), line1 + '\n' + line2, 'wrapped at 45 again')
+  await commands.executeCommand('workbench.action.revertAndCloseActiveEditor')
+}
+
+/** Cell wrapping changes only prose; metadata, cell markers and other cells
+ *  survive both the cursor command and a subsequent whole-document selection. */
+const testAsciiDocTableCells = async () => {
+  const cell = Array(12).fill('alpha').join(' ')
+  const wrapped = '|' + Array(7).fill('alpha').join(' ') + '\n' + Array(5).fill('alpha').join(' ')
+  const doc = await workspace.openTextDocument({
+    language: 'asciidoc', content: `[cols="1,1"]\n|===\n|${cell}\n|${cell}\n|===`,
+  })
+  const editor = await window.showTextDocument(doc)
+  editor.selection = new Selection(2, 3, 2, 3)
+  await commands.executeCommand('asciidocRewrap.rewrap')
+  assert.equal(doc.getText(), `[cols="1,1"]\n|===\n${wrapped}\n|${cell}\n|===`)
+  await commands.executeCommand('editor.action.selectAll')
+  await commands.executeCommand('asciidocRewrap.rewrap')
+  assert.equal(doc.getText(), `[cols="1,1"]\n|===\n${wrapped}\n${wrapped}\n|===`)
   await commands.executeCommand('workbench.action.revertAndCloseActiveEditor')
 }
 
@@ -147,6 +165,9 @@ exports.run = async () => {
   for(const [l, e] of Object.entries(expectedSettings)) { await testSettings(l,e) }
 
   // Wrapping tests
+  await testWrapping("asciidoc", "one\ntwo\n* first\nitem\n* second", "one two\n* first item\n* second")
+  await testWrapping("markdown", "one\ntwo", "one two")
+  await testWrapping("plaintext", "one\ntwo", "one two")
   await testWrapping ("javascript", "// a\n// b", "// a b")
   await testWrapping ("rewrap-test-custom", "// a\n// b", "// a b")
   await testUnorderedCursors()
@@ -160,4 +181,5 @@ exports.run = async () => {
 
   // Ruler tests
   await testRulerCycleAfterNoopWrap()
+  await testAsciiDocTableCells()
 }

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build, test, package, and publish the Rewrap Revived VS Code extension."""
+"""Build, test, package, and publish the AsciiDoc Rewrap VS Code extension."""
 
 from __future__ import annotations
 
@@ -21,7 +21,7 @@ CORE_PROD = "core/dist/index.js"
 VSCODE_MAIN = "vscode/dist/Extension.node.js"
 CACHE_DIR = ".cache"
 DIST_DIR = "dist"
-VSIX = f"{DIST_DIR}/rewrap-revived-{{version}}.vsix"
+VSIX = f"{DIST_DIR}/asciidoc-rewrap-{{version}}.vsix"
 
 
 def main():
@@ -118,6 +118,7 @@ def test(args):
         if args.release and outdated(CORE_TEST_PROD, CORE_TEST_DEV):
             npx(args, f"parcel build core/test --cache-dir {CACHE_DIR}/parcel")
         run(f"node core/test{'/prod' if args.release else ''}")
+        run("node core/test/asciidoc-semantics.mjs")
     if args.vscode:
         if shutil.which("xvfb-run"):
             run(
@@ -142,8 +143,9 @@ def package(args):
         build(args)
 
     shutil.copyfile("README.md", "vscode/README.md")
+    shutil.copyfile("CHANGELOG.md", "vscode/CHANGELOG.md")
     readme = Path("vscode/README.md")
-    readme.write_text(readme.read_text().replace(".svg", ".png"))
+    readme.write_text(readme.read_text(encoding="utf-8").replace(".svg", ".png"), encoding="utf-8")
 
     version = read_version()
     pre = "" if version.is_stable() else "--pre-release"
@@ -163,7 +165,6 @@ def publish(args):
     path = VSIX.format(version=version)
 
     npx(args, f"vsce publish {pre} -i {path}")
-    npx(args, f"ovsx publish {pre} -i {path}")
 
 
 def install(args):
@@ -226,19 +227,19 @@ def version(args):
 def release_notes(args):
     version_number = Version.parse(args.version) if args.version else read_version()
 
-    changelog = Path("CHANGELOG.md").read_text()
-    heading = re.search(rf"^#\s+{re.escape(str(version_number))}\s*$", changelog, re.MULTILINE)
+    changelog = Path("CHANGELOG.md").read_text(encoding="utf-8")
+    heading = re.search(rf"^#{{1,2}}\s+{re.escape(str(version_number))}\s*$", changelog, re.MULTILINE)
     if not heading:
         sys.exit(f"No changelog section found for {version_number}")
 
     start = heading.end()
-    next_heading = re.search(r"^#\s+\S", changelog[start:], re.MULTILINE)
+    next_heading = re.search(r"^#{1,2}\s+\S", changelog[start:], re.MULTILINE)
     end = start + next_heading.start() if next_heading else len(changelog)
     notes = changelog[start:end].strip()
     if not notes:
         sys.exit(f"Changelog section for {version_number} is empty")
 
-    with open(f"release-notes.md", "w") as f:
+    with open("release-notes.md", "w", encoding="utf-8") as f:
         f.write(notes)
 
 

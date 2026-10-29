@@ -7,8 +7,8 @@ body:
   - type: input
     id: version
     attributes:
-      label: Rewrap Revived Version
-      placeholder: e.g. 18.3.0
+      label: AsciiDoc Rewrap Version
+      placeholder: e.g. 0.1.1
     validations:
       required: true
 

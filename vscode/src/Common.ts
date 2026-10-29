@@ -154,14 +154,14 @@ export async function applyEdit (editor: TextEditor, edit: Edit) {
 
 /** Catches any error and displays a friendly message to the user. */
 export function catchErr (err) {
-  console.error("====== Rewrap: Error ======")
+  console.error("====== AsciiDoc Rewrap: Error ======")
   console.log(err)
   console.error(
-    "^^^^^^ Rewrap: Please report this (with a copy of the above lines) ^^^^^^\n" +
-    "at https://github.com/dnut/rewrap/issues"
+    "^^^^^^ AsciiDoc Rewrap: Please report this (with a copy of the above lines) ^^^^^^\n" +
+    "Report this with the console output at https://github.com/rgr-prog/asciidoc-rewrap/issues"
   )
   vscode.window.showInformationMessage(
-    "Sorry, there was an error in Rewrap. " +
+    "Sorry, there was an error in AsciiDoc Rewrap. " +
     "Go to: Help -> Toggle Developer Tools -> Console " +
     "for more information."
   )
@@ -175,6 +175,8 @@ export function docLine (document: TextDocument) {
 /** Gets the path and language of the document. These are used to determine the parser
  *  used for it. */
 export function docType (document: TextDocument): DocType {
-    const path = document.fileName, language = document.languageId
+    const path = document.fileName
+    // Recognize .adoc even when no syntax-highlighting extension is installed.
+    const language = /\.adoc$/i.test(path) ? 'asciidoc' : document.languageId
     return {path, language, getMarkers: () => getCustomMarkers(language)}
 }

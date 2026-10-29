@@ -12,9 +12,9 @@ async function activate (context: vscode.ExtensionContext) {
 
   // Register the commands
   context.subscriptions.push
-    ( commands.registerTextEditorCommand('rewrap.rewrapComment', rewrapCommentCommand)
-    , commands.registerTextEditorCommand('rewrap.rewrapCommentAt', rewrapCommentAtCommand)
-    , commands.registerTextEditorCommand('rewrap.toggleAutoWrap', autoWrap.editorToggle)
+    ( commands.registerTextEditorCommand('asciidocRewrap.rewrap', rewrapCommentCommand)
+    , commands.registerTextEditorCommand('asciidocRewrap.rewrapAt', rewrapCommentAtCommand)
+    , commands.registerTextEditorCommand('asciidocRewrap.toggleAutoWrap', autoWrap.editorToggle)
     , workspace.onWillSaveTextDocument(onSaveDocument)
     )
 }

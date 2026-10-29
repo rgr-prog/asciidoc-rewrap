@@ -70,7 +70,7 @@ let private lang name aliases exts parser =
 
 let mutable languages = [
     lang "AsciiDoc" "" ".adoc|.asciidoc"
-        plainText
+        AsciiDoc.document
     lang "AutoHotkey" "ahk" ".ahk" <| sc [line ";"; cBlock]
     lang "Basic" "vb" ".vb"
         ( oldSourceCode [ customLine xmldoc "'''"; oldLine "'" ] )

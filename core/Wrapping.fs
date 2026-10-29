@@ -149,6 +149,12 @@ type OutputBuffer(settings : Settings) =
     linesConsumed <- linesConsumed + consumed
     outputLines <- newOutputLines
 
+  /// A structured block can produce a different number of lines while still
+  /// accounting for the original source lines consumed by the selection engine.
+  member _.replace (consumed: int, lines: string seq) =
+    linesConsumed <- linesConsumed + consumed
+    for line in lines do outputLines <- line :: outputLines
+
   member this.wrap (mbPrefixFn: (string -> string) option, lines: Line Nonempty) =
     let prefixes = lines |> map (fun l -> l.prefix)
     let prefixes =

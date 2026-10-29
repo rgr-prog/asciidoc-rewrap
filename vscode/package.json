@@ -1,27 +1,16 @@
 {
-  "name": "rewrap-revived",
-  "displayName": "Rewrap Revived",
-  "description": "Hard word wrapping for comments and other text at a given column.",
+  "name": "asciidoc-rewrap",
+  "displayName": "AsciiDoc Rewrap",
+  "description": "Hard-wrap AsciiDoc prose while preserving its block syntax.",
   "keywords": [
+    "asciidoc",
+    "asciidoctor",
+    "adoc",
     "word wrap",
-    "hard wrap",
-    "comments",
-    "column",
-    "line length",
-    "fill",
-    "paragraph",
-    "multi-root ready"
+    "hard wrap"
   ],
-  "version": "18.4.1",
-  "publisher": "dnut",
-  "icon": "logo.png",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/dnut/rewrap.git"
-  },
-  "bugs": {
-    "url": "https://github.com/dnut/rewrap/issues"
-  },
+  "version": "0.1.1",
+  "publisher": "RogerioCunha",
   "license": "SEE LICENSE IN LICENSE",
   "engines": {
     "node": ">=12.x",
@@ -37,9 +26,10 @@
   "markdown": "standard",
   "activationEvents": [
     "onStartupFinished",
-    "onCommand:rewrap.rewrapComment",
-    "onCommand:rewrap.rewrapCommentAt",
-    "onCommand:rewrap.toggleAutoWrap"
+    "onLanguage:asciidoc",
+    "onCommand:asciidocRewrap.rewrap",
+    "onCommand:asciidocRewrap.rewrapAt",
+    "onCommand:asciidocRewrap.toggleAutoWrap"
   ],
   "main": "./dist/Extension.node.js",
   "browser": "./dist/Extension.browser.js",
@@ -51,58 +41,58 @@
   "contributes": {
     "commands": [
       {
-        "command": "rewrap.rewrapComment",
-        "title": "Rewrap Comment / Text"
+        "command": "asciidocRewrap.rewrap",
+        "title": "AsciiDoc Rewrap: Wrap Text"
       },
       {
-        "command": "rewrap.rewrapCommentAt",
-        "title": "Rewrap/Unwrap Text At Column..."
+        "command": "asciidocRewrap.rewrapAt",
+        "title": "AsciiDoc Rewrap: Wrap / Unwrap at Column..."
       },
       {
-        "command": "rewrap.toggleAutoWrap",
-        "title": "Rewrap: Toggle Auto-Wrap for Current Document"
+        "command": "asciidocRewrap.toggleAutoWrap",
+        "title": "AsciiDoc Rewrap: Toggle Auto-Wrap"
       }
     ],
     "configuration": {
-      "title": "Rewrap",
+      "title": "AsciiDoc Rewrap",
       "properties": {
-        "rewrap.wrappingColumn": {
+        "asciidocRewrap.wrappingColumn": {
           "scope": "language-overridable",
           "type": "number",
           "default": 0,
           "description": "Controls after how many characters text is wrapped."
         },
-        "rewrap.doubleSentenceSpacing": {
+        "asciidocRewrap.doubleSentenceSpacing": {
           "scope": "language-overridable",
           "type": "boolean",
           "default": false,
           "description": "When wrapping lines that end in a period, adds two spaces after that sentence in the wrapped text."
         },
-        "rewrap.wholeComment": {
+        "asciidocRewrap.wholeComment": {
           "scope": "language-overridable",
           "type": "boolean",
           "default": true,
           "description": "With the cursor inside a comment block, wrap the whole comment block instead of just a single paragraph."
         },
-        "rewrap.reformat": {
+        "asciidocRewrap.reformat": {
           "scope": "language-overridable",
           "type": "boolean",
           "default": false,
           "description": "(EXPERIMENTAL) When wrapping lines, reformat paragraph indents."
         },
-        "rewrap.onSave": {
+        "asciidocRewrap.onSave": {
           "scope": "language-overridable",
           "type": "boolean",
           "default": false,
           "description": "Do a rewrap on the whole document when saving."
         },
-        "rewrap.autoWrap.enabled": {
+        "asciidocRewrap.autoWrap.enabled": {
           "scope": "language-overridable",
           "type": "boolean",
           "default": false,
           "description": "Wraps automatically when the cursor is past the wrapping column."
         },
-        "rewrap.autoWrap.notification": {
+        "asciidocRewrap.autoWrap.notification": {
           "scope": "language-overridable",
           "type": "string",
           "description": "Notification type for when auto-wrap is on/off for the current document.",
@@ -120,9 +110,21 @@
     },
     "keybindings": [
       {
-        "command": "rewrap.rewrapComment",
+        "command": "asciidocRewrap.rewrap",
         "key": "alt+q",
         "when": "editorTextFocus"
+      }
+    ],
+    "languages": [
+      {
+        "id": "asciidoc",
+        "aliases": [
+          "AsciiDoc",
+          "asciidoc"
+        ],
+        "extensions": [
+          ".adoc"
+        ]
       }
     ]
   },
@@ -148,5 +150,14 @@
         "vscode": false
       }
     }
-  }
+  },
+  "author": "Rogério Ferreira da Cunha",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rgr-prog/asciidoc-rewrap.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rgr-prog/asciidoc-rewrap/issues"
+  },
+  "homepage": "https://github.com/rgr-prog/asciidoc-rewrap#readme"
 }

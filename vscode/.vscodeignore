@@ -3,7 +3,8 @@
 # Whitelist
 !dist/**
 !LICENSE
-!logo.png
+!NOTICE
+!CHANGELOG.md
 !package.json
 !package-lock.json
 !README.md

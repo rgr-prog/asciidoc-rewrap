@@ -1,60 +1,71 @@
-<!-- This part has to be written in HTML, because doing it in markdown puts the content in
-a <p>, which adds unwanted margins. It has to be in a table so it can be right-aligned on
-GitHub. For GitHub we can't get rid of the border on the td nor make the font smaller as
-we want-->
-<table class="topright" align="right" style="font-size:90%;width:auto;margin:0;border:none">
-<tr style="border:none"><td align="right" style="border:none">
-<div class="hideOnDocsSite"><b><a href="https://dnut.github.io/Rewrap">Read the Docs</a></b><br/></div>
-For <a href="https://marketplace.visualstudio.com/items?itemName=dnut.rewrap-revived"><b>VS Code</b></a>,
-<a href="https://open-vsx.org/extension/dnut/rewrap-revived"><b>Open VSX</b></a> and
-<a href="https://marketplace.visualstudio.com/items?itemName=stkb.Rewrap-18980">
-  <b>Visual Studio</b></a>.<br/>
-Latest stable version <b>18.3.0</b> / pre-release <b>18.4.1</b> /
-<a href="https://github.com/dnut/rewrap/releases">changelog</a>
-</td></tr></table>
+# AsciiDoc Rewrap
 
+Extensão para VS Code com suporte específico para ajustar a largura de texto em arquivos `.adoc`, respeitando a estrutura do AsciiDoc usado pelo Asciidoctor. O suporte às outras linguagens do projeto de origem também foi mantido. Mantido por **Rogério Ferreira da Cunha**. Fork de [Rewrap Revived](https://github.com/dnut/rewrap), que deriva do [Rewrap](https://github.com/stkb/Rewrap).
 
-<h1 style="font-size: 2.5em">Rewrap Revived</h1>
+## Uso
 
-Rewrap Revived is a Visual Studio and VS Code extension that is used to hard-wrap code 
-comments to a configured maximium line length. This is a fork of the unmaintained 
-[Rewrap](https://github.com/stkb/Rewrap) extension by Steve Baker 
-([@stkb](https://github.com/stkb)).
+Abra um arquivo `.adoc` e pressione **Alt+Q**, ou execute **AsciiDoc Rewrap: Wrap Text**. Sem seleção, ajusta o parágrafo ou item onde está o cursor. Selecione um trecho ou o documento inteiro para ajustar vários blocos. Documentos AsciiDoc ainda não salvos também são aceitos.
 
-<br><img src="https://dnut.github.io/Rewrap/images/example.svg" width="700px"/><br/><br/>
+**AsciiDoc Rewrap: Wrap / Unwrap at Column...** permite informar uma coluna; deixe em branco para juntar as linhas de cada parágrafo, respeitando os blocos protegidos.
 
-The main Rewrap command is: <sn>**Rewrap Comment / Text**</sn>, by default bound to
-`Alt+Q`. With the cursor in a comment block, hit this to re-wrap the contents to the
-[specified wrapping column](https://dnut.github.io/Rewrap/configuration/#wrapping-column).
+A largura segue, nesta ordem, `asciidocRewrap.wrappingColumn`, `editor.rulers` e `editor.wordWrapColumn`. Com vários rulers, repetir o comando alterna entre as larguras.
 
-## Features
+```json
+{
+  "[asciidoc]": {
+    "asciidocRewrap.wrappingColumn": 80,
+    "asciidocRewrap.onSave": false,
+    "asciidocRewrap.autoWrap.enabled": false
+  }
+}
+```
 
-* Re-wrap comment blocks in many languages, with per-language settings.
-* Smart handling of contents, including Java-/JS-/XMLDoc tags and code examples.
-* Can select lines to wrap or multiple comments/paragraphs at once (even the whole
-  document).
-* Also works with Markdown documents, LaTeX or any kind of plain text file.
+Os comandos, ajustes ao salvar e auto-wrap também continuam disponíveis nas outras linguagens herdadas do Rewrap Revived, incluindo Markdown e comentários de código. A extensão pode coexistir com Rewrap Revived: os comandos e as configurações têm um namespace próprio. Se ambas usarem Alt+Q, configure a preferência nos atalhos do VS Code.
 
-The contents of comments are usually parsed as markdown, so you can use lists, code
-samples (which are untouched) etc:
+## Sintaxe tratada
 
-<img src="https://dnut.github.io/Rewrap/images/example1.svg" width="700px"/>
+- Parágrafos, itens de listas simples e aninhadas (`*`, `-`, `.`, `1.`, `<1>`), checklists e listas de descrição (`::`, `:::`, `::::`, `;;`). Cada item mantém seu marcador e sua separação.
+- Títulos de documento e seções, autor e revisão no cabeçalho, âncoras (`[[id]]`), atributos, títulos de bloco e metadados permanecem em linhas próprias.
+- Citações `[quote]` e blocos `____`: ajusta o texto e preserva os delimitadores e a atribuição. Blocos de exemplo, sidebar e open blocks também permitem ajustar a prosa interna.
+- Tabelas PSV (`|===` e `!===`): ajusta a prosa de cada célula à coluna configurada, incluindo células com várias linhas e várias células na mesma linha. Preserva delimitadores, separadores, especificadores, espaçamento entre parágrafos e atributos como `cols`, `options` e alinhamento. Não alinha visualmente as colunas nem redistribui a largura de renderização. Células explicitamente literais ou AsciiDoc são preservadas. Tabelas CSV/DSV/TSV, tabelas com diretivas ou modelos de coluna literais/AsciiDoc permanecem intactas. A primeira linha é preservada quando necessária para manter a inferência do cabeçalho ou das colunas.
+- Blocos de código, literais, passthrough, comentários e versos ficam intactos. Delimitadores de abertura e fechamento precisam coincidir; um bloco literal sem fechamento é protegido até o fim do arquivo.
+- Parágrafos com quebra explícita ` +`, parágrafos literais indentados e citações com `>` são preservados.
+- Diretivas, macros de bloco e referências de atributos são preservadas; espaços dentro de macros inline e trechos entre crases não viram quebras de linha.
 
-<div class="hideOnDocsSite"><br/><b><a href="https://dnut.github.io/Rewrap/">
-See the docs site for more info.</a></b></div>
+Este é um parser de estruturas para edição do texto fonte, sem executar includes, condicionais ou extensões do Asciidoctor. O wrap de células se limita à prosa em tabelas PSV, preservando os modelos de conteúdo que exigem outro processamento. Sintaxes personalizadas e atributos globais que alteram o modelo de conteúdo podem exigir regras adicionais. Os parsers e o suporte às outras linguagens permanecem disponíveis na extensão e são cobertos pela suíte de regressão herdada.
 
-## Installation
+Referências usadas: [estrutura de blocos](https://docs.asciidoctor.org/asciidoc/latest/blocks/), [delimitadores](https://docs.asciidoctor.org/asciidoc/latest/blocks/delimited/), [listas compostas](https://docs.asciidoctor.org/asciidoc/latest/lists/continuation/) e [citações](https://docs.asciidoctor.org/asciidoc/latest/blocks/blockquotes/).
 
-Rewrap Revived is available in both the
-[Microsoft marketplace](https://marketplace.visualstudio.com/items?itemName=dnut.rewrap-revived)
-and the [OpenVSX marketplace](https://open-vsx.org/extension/dnut/rewrap-revived).
+## Desenvolvimento e instalação local
 
-**Install the pre-release version** so you have access to the latest features, and so that if you
-encounter a new bug, you can fix it immediately on your machine by downgrading to the stable
-release. Then report it on github so it will be fixed before appearing in a stable release.
+Pré-requisitos: .NET SDK 10, Node.js e Python 3. O runtime do .NET sozinho não compila o núcleo F#.
 
-## Contributing
+```sh
+npm ci
+npm ci --prefix vscode
+python do build
+python do test
+python do package
+```
 
-To build and test locally, run `./do build` and `./do test`. See the
-[contributing guide](https://dnut.github.io/Rewrap/CONTRIBUTING/) for full development workflow
-documentation including prerequisites, manual testing, and publishing.
+O pacote será criado em `dist/asciidoc-rewrap-0.1.1.vsix`. Instale pelo comando **Extensions: Install from VSIX...** do VS Code. Para depurar, abra o projeto e use a configuração **Extension** (F5).
+
+Os exemplos em `docs/specs/content-types/asciidoc.md` e `asciidoc-tables.md` são testes executáveis. A comparação com o Asciidoctor verifica a renderização e a estabilidade ao repetir o wrap em diferentes larguras. Os demais exemplos verificam o comportamento do núcleo herdado. Os testes de integração verificam comandos, seleções, auto-wrap e o suporte às outras linguagens.
+
+## Identidade e publicação
+
+- Repositório: [rgr-prog/asciidoc-rewrap](https://github.com/rgr-prog/asciidoc-rewrap), fork de Rewrap Revived.
+- Autor e mantenedor: **Rogério Ferreira da Cunha**.
+- Publisher do Marketplace: `RogerioCunha`.
+- ID da extensão: `RogerioCunha.asciidoc-rewrap`.
+- Bugs e sugestões: [issues deste fork](https://github.com/rgr-prog/asciidoc-rewrap/issues).
+
+Para publicar no Visual Studio Marketplace, gere o VSIX com `python do package` e envie-o pelo painel do publisher **RogerioCunha**. Com a autenticação VSCE configurada, `python do publish` publica no Marketplace. O comando não publica em outros registries.
+
+O ícone original não é usado como identidade desta extensão. O histórico e os créditos dos projetos de origem foram preservados; esta extensão tem identidade própria.
+
+## Créditos e licença
+
+Agradecimentos a **Steve Baker (@stkb)**, criador do Rewrap, e **Drew Nutter (@dnut)**, mantenedor do Rewrap Revived, pelo mecanismo de wrapping, integração com os editores e testes usados como base.
+
+Esta derivação modifica o processamento de AsciiDoc, mantém o suporte às demais linguagens e adota identidade e configurações próprias. Os avisos de copyright e os arquivos `LICENSE` originais foram preservados. O código segue a licença Apache 2.0 do projeto de origem. A pasta `docs` e a integração histórica com Visual Studio em `vs` são material herdado; a extensão deste fork é a de `vscode`.

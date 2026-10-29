@@ -1,0 +1,13 @@
+AsciiDoc Rewrap
+
+Derived from Rewrap Revived (https://github.com/dnut/rewrap)
+and Rewrap (https://github.com/stkb/Rewrap).
+
+Copyright 2017 Steve Baker
+Copyright 2026 Drew Nutter
+Copyright 2026 Rogério Ferreira da Cunha
+
+This derivative adds AsciiDoc block parsing and tests, changes the extension's
+identity, commands and configuration namespace, and retains support for the
+other upstream languages. The original copyright notices and Apache 2.0
+license have been preserved. See LICENSE and the README for acknowledgements.

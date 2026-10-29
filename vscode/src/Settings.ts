@@ -40,23 +40,23 @@ export function getEditorSettings (editor: TextEditor) : EditorSettings {
   return {
     autoWrap: getAutoWrapSettings(config, editor.document.languageId),
     columns: getWrappingColumns(config, editor.document),
-    doubleSentenceSpacing: setting('rewrap.doubleSentenceSpacing'),
-    wholeComment: setting('rewrap.wholeComment'),
-    reformat: setting('rewrap.reformat'),
+    doubleSentenceSpacing: setting('asciidocRewrap.doubleSentenceSpacing'),
+    wholeComment: setting('asciidocRewrap.wholeComment'),
+    reformat: setting('asciidocRewrap.reformat'),
     tabWidth: checkTabSize(editor.options.tabSize),
   }
 }
 
 /** Gets the onSave setting for the wrap-on-save feature */
 export function getOnSaveSetting (document: TextDocument) : boolean {
-  return workspace.getConfiguration('', document).get('rewrap.onSave', false)
+  return workspace.getConfiguration('', document).get('asciidocRewrap.onSave', false)
 }
 
 const getAutoWrapSettings =
   (config: WorkspaceConfiguration, lang: string) : AutoWrapSettings =>
 ({
-  enabled: settingWithOrigin(config, lang)('rewrap.autoWrap.enabled'),
-  notification: config.get('rewrap.autoWrap.notification', 'icon'),
+  enabled: settingWithOrigin(config, lang)('asciidocRewrap.autoWrap.enabled'),
+  notification: config.get('asciidocRewrap.autoWrap.notification', 'icon'),
 })
 
 /** Gets an array of the available wrapping column(s) from the user's settings. */
@@ -70,7 +70,7 @@ function getWrappingColumns
   const get = settingWithOrigin (config, doc.languageId)
 
   {
-    const s = get<number>('rewrap.wrappingColumn')
+    const s = get<number>('asciidocRewrap.wrappingColumn')
     if (s.value) return {...s, value: [checkColumn(s.value)]}
   } {
     const s = get<number[]>('editor.rulers')

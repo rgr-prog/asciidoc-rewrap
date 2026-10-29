@@ -3,6 +3,9 @@ const { downloadAndUnzipVSCode, runTests } = require('@vscode/test-electron')
 
 async function main() {
   try {
+    // Electron-based terminals may pass this to Node. The test executable
+    // must start VS Code, rather than interpret the workspace as a script.
+    delete process.env.ELECTRON_RUN_AS_NODE
     const cachePath = resolve(__dirname, '../../.cache/vscode-test')
     const extensionDevelopmentPath = resolve(__dirname, '..')
     const extensionTestsPath = resolve(__dirname, 'tests.cjs')

@@ -1,17 +1,18 @@
 {
+    "files.eol": "\n",
     "editor.rulers": [{"column": 45}, 90],
     "editor.tabSize": 2,
-    "rewrap.doubleSentenceSpacing": true,
-    "rewrap.reformat": true,
-    "rewrap.wholeComment": false,
+    "asciidocRewrap.doubleSentenceSpacing": true,
+    "asciidocRewrap.reformat": true,
+    "asciidocRewrap.wholeComment": false,
     "[markdown]": {
-        "rewrap.wrappingColumn": 60,
+        "asciidocRewrap.wrappingColumn": 60,
         "editor.tabSize": 6,
-        "rewrap.doubleSentenceSpacing": false,
-        "rewrap.reformat": false,
-        "rewrap.wholeComment": true,
+        "asciidocRewrap.doubleSentenceSpacing": false,
+        "asciidocRewrap.reformat": false,
+        "asciidocRewrap.wholeComment": true,
     },
     "[ahk]": {
-        "rewrap.wrappingColumn": 40,
+        "asciidocRewrap.wrappingColumn": 40,
     }
 }

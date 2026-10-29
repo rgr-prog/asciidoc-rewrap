@@ -2,15 +2,15 @@
 
 <img src="https://raw.githubusercontent.com/rgr-prog/asciidoc-rewrap/master/vscode/asciidoc-rewrap.png" width="128" height="128" alt="AsciiDoc Rewrap" />
 
-Extensão para VS Code com suporte específico para ajustar a largura de texto em arquivos `.adoc`, respeitando a estrutura do AsciiDoc usado pelo Asciidoctor. O suporte às outras linguagens do projeto de origem também foi mantido. Mantido por **Rogério Ferreira da Cunha**. Fork de [Rewrap Revived](https://github.com/dnut/rewrap), que deriva do [Rewrap](https://github.com/stkb/Rewrap).
+A VS Code extension that hard-wraps text in `.adoc` files while respecting the AsciiDoc structure used by Asciidoctor. Support for the other languages from the upstream project is also retained. Maintained by **Rogério Ferreira da Cunha**. Forked from [Rewrap Revived](https://github.com/dnut/rewrap), which is based on [Rewrap](https://github.com/stkb/Rewrap).
 
-## Uso
+## Usage
 
-Abra um arquivo `.adoc` e pressione **Alt+Q**, ou execute **AsciiDoc Rewrap: Wrap Text**. Sem seleção, ajusta o parágrafo ou item onde está o cursor. Selecione um trecho ou o documento inteiro para ajustar vários blocos. Documentos AsciiDoc ainda não salvos também são aceitos.
+Open an `.adoc` file and press **Alt+Q**, or run **AsciiDoc Rewrap: Wrap Text**. With no selection, the command wraps the paragraph or list item at the cursor. Select a range or the entire document to wrap multiple blocks. Unsaved AsciiDoc documents are also supported.
 
-**AsciiDoc Rewrap: Wrap / Unwrap at Column...** permite informar uma coluna; deixe em branco para juntar as linhas de cada parágrafo, respeitando os blocos protegidos.
+**AsciiDoc Rewrap: Wrap / Unwrap at Column...** lets you choose a wrapping column. Leave it blank to join the lines within each paragraph while preserving protected blocks.
 
-A largura segue, nesta ordem, `asciidocRewrap.wrappingColumn`, `editor.rulers` e `editor.wordWrapColumn`. Com vários rulers, repetir o comando alterna entre as larguras.
+The wrapping width is taken from `asciidocRewrap.wrappingColumn`, `editor.rulers`, or `editor.wordWrapColumn`, in that order. If multiple rulers are configured, running the command repeatedly cycles through their widths.
 
 ```json
 {
@@ -22,25 +22,25 @@ A largura segue, nesta ordem, `asciidocRewrap.wrappingColumn`, `editor.rulers` e
 }
 ```
 
-Os comandos, ajustes ao salvar e auto-wrap também continuam disponíveis nas outras linguagens herdadas do Rewrap Revived, incluindo Markdown e comentários de código. A extensão pode coexistir com Rewrap Revived: os comandos e as configurações têm um namespace próprio. Se ambas usarem Alt+Q, configure a preferência nos atalhos do VS Code.
+The commands, wrap on save, and automatic wrapping remain available for the other languages inherited from Rewrap Revived, including Markdown and code comments. This extension can coexist with Rewrap Revived: its commands and settings use a separate namespace. If both extensions use Alt+Q, choose your preferred binding in VS Code's Keyboard Shortcuts editor.
 
-## Sintaxe tratada
+## Supported syntax
 
-- Parágrafos, itens de listas simples e aninhadas (`*`, `-`, `.`, `1.`, `<1>`), checklists e listas de descrição (`::`, `:::`, `::::`, `;;`). Cada item mantém seu marcador e sua separação.
-- Títulos de documento e seções, autor e revisão no cabeçalho, âncoras (`[[id]]`), atributos, títulos de bloco e metadados permanecem em linhas próprias.
-- Citações `[quote]` e blocos `____`: ajusta o texto e preserva os delimitadores e a atribuição. Blocos de exemplo, sidebar e open blocks também permitem ajustar a prosa interna.
-- Tabelas PSV (`|===` e `!===`): ajusta a prosa de cada célula à coluna configurada, incluindo células com várias linhas e várias células na mesma linha. Preserva delimitadores, separadores, especificadores, espaçamento entre parágrafos e atributos como `cols`, `options` e alinhamento. Não alinha visualmente as colunas nem redistribui a largura de renderização. Células explicitamente literais ou AsciiDoc são preservadas. Tabelas CSV/DSV/TSV, tabelas com diretivas ou modelos de coluna literais/AsciiDoc permanecem intactas. A primeira linha é preservada quando necessária para manter a inferência do cabeçalho ou das colunas.
-- Blocos de código, literais, passthrough, comentários e versos ficam intactos. Delimitadores de abertura e fechamento precisam coincidir; um bloco literal sem fechamento é protegido até o fim do arquivo.
-- Parágrafos com quebra explícita ` +`, parágrafos literais indentados e citações com `>` são preservados.
-- Diretivas, macros de bloco e referências de atributos são preservadas; espaços dentro de macros inline e trechos entre crases não viram quebras de linha.
+- Paragraphs, simple and nested list items (`*`, `-`, `.`, `1.`, `<1>`), checklists, and description lists (`::`, `:::`, `::::`, `;;`). Each item keeps its marker and remains separate from adjacent items.
+- Document and section titles, author and revision information in the document header, anchors (`[[id]]`), attributes, block titles, and metadata stay on their own lines.
+- `[quote]` paragraphs and `____` quote blocks: prose is wrapped while delimiters and attribution are preserved. Prose inside example blocks, sidebars, and open blocks can also be wrapped.
+- PSV tables (`|===` and `!===`): prose in each cell is wrapped at the configured column, including multiline cells and multiple cells on the same source line. Delimiters, separators, cell specifiers, paragraph spacing, and attributes such as `cols`, `options`, and alignment are preserved. Wrapping does not visually align columns or change their rendered widths. Explicit literal and AsciiDoc cells are preserved. CSV/DSV/TSV tables, tables containing directives, and tables with literal or AsciiDoc column models remain untouched. The first source line is preserved when needed to retain inferred headers or columns.
+- Code, literal, passthrough, comment, and verse blocks remain untouched. Opening and closing delimiters must match; an unclosed verbatim block is protected through the end of the file.
+- Paragraphs containing explicit line breaks (` +`), indented literal paragraphs, and `>` quotations are preserved.
+- Directives, block macros, and attribute references are preserved. Spaces inside inline macros and backtick-delimited text are not turned into line breaks.
 
-Este é um parser de estruturas para edição do texto fonte, sem executar includes, condicionais ou extensões do Asciidoctor. O wrap de células se limita à prosa em tabelas PSV, preservando os modelos de conteúdo que exigem outro processamento. Sintaxes personalizadas e atributos globais que alteram o modelo de conteúdo podem exigir regras adicionais. Os parsers e o suporte às outras linguagens permanecem disponíveis na extensão e são cobertos pela suíte de regressão herdada.
+This parser identifies source structures for editing without executing includes, conditionals, or Asciidoctor extensions. Table cell wrapping is limited to prose in PSV tables; content models requiring different processing are preserved. Custom syntax and global attributes that change a block's content model may need additional rules. Parsers and support for the other languages remain available and are covered by the inherited regression suite.
 
-Referências usadas: [estrutura de blocos](https://docs.asciidoctor.org/asciidoc/latest/blocks/), [delimitadores](https://docs.asciidoctor.org/asciidoc/latest/blocks/delimited/), [listas compostas](https://docs.asciidoctor.org/asciidoc/latest/lists/continuation/) e [citações](https://docs.asciidoctor.org/asciidoc/latest/blocks/blockquotes/).
+Syntax references: [blocks](https://docs.asciidoctor.org/asciidoc/latest/blocks/), [delimiters](https://docs.asciidoctor.org/asciidoc/latest/blocks/delimited/), [compound list items](https://docs.asciidoctor.org/asciidoc/latest/lists/continuation/), and [blockquotes](https://docs.asciidoctor.org/asciidoc/latest/blocks/blockquotes/).
 
-## Desenvolvimento e instalação local
+## Development and local installation
 
-Pré-requisitos: .NET SDK 10, Node.js e Python 3. O runtime do .NET sozinho não compila o núcleo F#.
+Prerequisites: .NET SDK 10, Node.js, and Python 3. The .NET runtime alone cannot compile the F# core.
 
 ```sh
 npm ci
@@ -50,24 +50,24 @@ python do test
 python do package
 ```
 
-O pacote será criado em `dist/asciidoc-rewrap-0.1.2.vsix`. Instale pelo comando **Extensions: Install from VSIX...** do VS Code. Para depurar, abra o projeto e use a configuração **Extension** (F5).
+The package is created as `dist/asciidoc-rewrap-<version>.vsix`. Install it using **Extensions: Install from VSIX...** in VS Code. To debug the extension, open the project and launch the **Extension** configuration (F5).
 
-Os exemplos em `docs/specs/content-types/asciidoc.md` e `asciidoc-tables.md` são testes executáveis. A comparação com o Asciidoctor verifica a renderização e a estabilidade ao repetir o wrap em diferentes larguras. Os demais exemplos verificam o comportamento do núcleo herdado. Os testes de integração verificam comandos, seleções, auto-wrap e o suporte às outras linguagens.
+The examples in [`docs/specs/content-types/asciidoc.md`](docs/specs/content-types/asciidoc.md) and [`asciidoc-tables.md`](docs/specs/content-types/asciidoc-tables.md) are executable tests. Comparisons against Asciidoctor check rendered output and stability when wrapping repeatedly at different widths. The other examples cover the inherited core. Integration tests exercise commands, selections, automatic wrapping, and support for the other languages.
 
-## Identidade e publicação
+## Project and publishing
 
-- Repositório: [rgr-prog/asciidoc-rewrap](https://github.com/rgr-prog/asciidoc-rewrap), fork de Rewrap Revived.
-- Autor e mantenedor: **Rogério Ferreira da Cunha**.
-- Publisher do Marketplace: `RogerioCunha`.
-- ID da extensão: `RogerioCunha.asciidoc-rewrap`.
-- Bugs e sugestões: [issues deste fork](https://github.com/rgr-prog/asciidoc-rewrap/issues).
+- Repository: [rgr-prog/asciidoc-rewrap](https://github.com/rgr-prog/asciidoc-rewrap), a fork of Rewrap Revived.
+- Author and maintainer: **Rogério Ferreira da Cunha**.
+- Marketplace publisher: `RogerioCunha`.
+- Extension ID: `RogerioCunha.asciidoc-rewrap`.
+- Bugs and suggestions: [this fork's issue tracker](https://github.com/rgr-prog/asciidoc-rewrap/issues).
 
-Para publicar no Visual Studio Marketplace, gere o VSIX com `python do package` e envie-o pelo painel do publisher **RogerioCunha**. Com a autenticação VSCE configurada, `python do publish` publica no Marketplace. O comando não publica em outros registries.
+To publish on the Visual Studio Marketplace, build the VSIX with `python do package` and upload it through the **RogerioCunha** publisher dashboard. Once VSCE authentication is configured, `python do publish` publishes to the Marketplace. This command does not publish to other registries.
 
-O ícone combina o desenho do Rewrap com um selo do Asciidoctor no canto inferior direito para identificar o suporte ao formato AsciiDoc. Os arquivos originais foram preservados; as fontes e os créditos visuais estão em [assets/README.md](https://github.com/rgr-prog/asciidoc-rewrap/blob/master/assets/README.md). O histórico e os créditos dos projetos de origem foram preservados.
+The icon combines the Rewrap artwork with an Asciidoctor badge in the lower-right corner to identify AsciiDoc support. The original assets are preserved; visual sources and acknowledgements are documented in [assets/README.md](https://github.com/rgr-prog/asciidoc-rewrap/blob/master/assets/README.md). Upstream history and credits are retained.
 
-## Créditos e licença
+## Credits and license
 
-Agradecimentos a **Steve Baker (@stkb)**, criador do Rewrap, e **Drew Nutter (@dnut)**, mantenedor do Rewrap Revived, pelo mecanismo de wrapping, integração com os editores e testes usados como base.
+Thanks to **Steve Baker (@stkb)**, the creator of Rewrap, and **Drew Nutter (@dnut)**, the maintainer of Rewrap Revived, for the wrapping engine, editor integration, and tests that this fork builds on.
 
-Esta derivação modifica o processamento de AsciiDoc, mantém o suporte às demais linguagens e adota identidade e configurações próprias. Os avisos de copyright e os arquivos `LICENSE` originais foram preservados. O código segue a licença Apache 2.0 do projeto de origem. A pasta `docs` e a integração histórica com Visual Studio em `vs` são material herdado; a extensão deste fork é a de `vscode`.
+This fork adds AsciiDoc processing, retains support for the other languages, and uses its own identity and settings. The original copyright notices and `LICENSE` files are preserved. The code remains under the upstream project's Apache 2.0 license. The `docs` directory and historical Visual Studio integration in `vs` are inherited material; this fork's VS Code extension lives in `vscode`.

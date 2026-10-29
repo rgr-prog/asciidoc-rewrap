@@ -1,5 +1,10 @@
 # AsciiDoc Rewrap changes
 
+## 0.1.3
+
+- Translate the project and packaged README into English.
+- Standardize public documentation and initial release notes in English.
+
 ## 0.1.2
 
 - Add an extension icon combining the Rewrap mark with an Asciidoctor badge.

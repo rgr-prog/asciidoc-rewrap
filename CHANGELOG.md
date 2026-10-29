@@ -1,5 +1,10 @@
 # AsciiDoc Rewrap changes
 
+## 0.1.2
+
+- Add an extension icon combining the Rewrap mark with an Asciidoctor badge.
+- Preserve the original artwork and document the visual sources and acknowledgements.
+
 ## 0.1.1
 
 - Wrap prose inside PSV table cells without changing table attributes, cell specifiers or separators.

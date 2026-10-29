@@ -11,3 +11,7 @@ This derivative adds AsciiDoc block parsing and tests, changes the extension's
 identity, commands and configuration namespace, and retains support for the
 other upstream languages. The original copyright notices and Apache 2.0
 license have been preserved. See LICENSE and the README for acknowledgements.
+
+The extension icon is a composition based on the original Rewrap artwork and
+the Asciidoctor visual identity (https://github.com/asciidoctor/brand), used
+to identify AsciiDoc support. The composition was prepared for this fork.

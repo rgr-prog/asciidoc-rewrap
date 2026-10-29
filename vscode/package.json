@@ -9,7 +9,7 @@
     "word wrap",
     "hard wrap"
   ],
-  "version": "0.1.1",
+  "version": "0.1.2",
   "publisher": "RogerioCunha",
   "license": "SEE LICENSE IN LICENSE",
   "engines": {
@@ -159,5 +159,6 @@
   "bugs": {
     "url": "https://github.com/rgr-prog/asciidoc-rewrap/issues"
   },
-  "homepage": "https://github.com/rgr-prog/asciidoc-rewrap#readme"
+  "homepage": "https://github.com/rgr-prog/asciidoc-rewrap#readme",
+  "icon": "asciidoc-rewrap.png"
 }

@@ -1,5 +1,7 @@
 # AsciiDoc Rewrap
 
+<img src="https://raw.githubusercontent.com/rgr-prog/asciidoc-rewrap/master/vscode/asciidoc-rewrap.png" width="128" height="128" alt="AsciiDoc Rewrap" />
+
 Extensão para VS Code com suporte específico para ajustar a largura de texto em arquivos `.adoc`, respeitando a estrutura do AsciiDoc usado pelo Asciidoctor. O suporte às outras linguagens do projeto de origem também foi mantido. Mantido por **Rogério Ferreira da Cunha**. Fork de [Rewrap Revived](https://github.com/dnut/rewrap), que deriva do [Rewrap](https://github.com/stkb/Rewrap).
 
 ## Uso
@@ -48,7 +50,7 @@ python do test
 python do package
 ```
 
-O pacote será criado em `dist/asciidoc-rewrap-0.1.1.vsix`. Instale pelo comando **Extensions: Install from VSIX...** do VS Code. Para depurar, abra o projeto e use a configuração **Extension** (F5).
+O pacote será criado em `dist/asciidoc-rewrap-0.1.2.vsix`. Instale pelo comando **Extensions: Install from VSIX...** do VS Code. Para depurar, abra o projeto e use a configuração **Extension** (F5).
 
 Os exemplos em `docs/specs/content-types/asciidoc.md` e `asciidoc-tables.md` são testes executáveis. A comparação com o Asciidoctor verifica a renderização e a estabilidade ao repetir o wrap em diferentes larguras. Os demais exemplos verificam o comportamento do núcleo herdado. Os testes de integração verificam comandos, seleções, auto-wrap e o suporte às outras linguagens.
 
@@ -62,7 +64,7 @@ Os exemplos em `docs/specs/content-types/asciidoc.md` e `asciidoc-tables.md` sã
 
 Para publicar no Visual Studio Marketplace, gere o VSIX com `python do package` e envie-o pelo painel do publisher **RogerioCunha**. Com a autenticação VSCE configurada, `python do publish` publica no Marketplace. O comando não publica em outros registries.
 
-O ícone original não é usado como identidade desta extensão. O histórico e os créditos dos projetos de origem foram preservados; esta extensão tem identidade própria.
+O ícone combina o desenho do Rewrap com um selo do Asciidoctor no canto inferior direito para identificar o suporte ao formato AsciiDoc. Os arquivos originais foram preservados; as fontes e os créditos visuais estão em [assets/README.md](https://github.com/rgr-prog/asciidoc-rewrap/blob/master/assets/README.md). O histórico e os créditos dos projetos de origem foram preservados.
 
 ## Créditos e licença
 
